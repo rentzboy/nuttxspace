@@ -1,0 +1,58 @@
+/* Las diferentes configuraciones disponibles para la extesnsion C/C++ que gestiona IntelliSense
+    Este archivo lo podemos copiar en cada proyecto y luego seleccionar la config. correcta
+    para nuestro proyecto desde la esquina inferior derecha de VS Code */
+
+//https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference
+{
+    "configurations": [
+        //Proyecto de Linux
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**"
+            ],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++14",
+            "intelliSenseMode": "linux-gcc-x64",
+            "configurationProvider": "ms-vscode.makefile-tools",
+            "browse":
+            {
+                "path":
+                [
+                    "${workspaceFolder}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
+        },
+        //Proyecto de STM32
+        {
+            "name": "Linux STM32",
+            "includePath":
+            [
+                "${workspaceFolder}/**"
+            ],
+            "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
+            "intelliSenseMode": "linux-gcc-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++20",
+            "defines":
+            [
+                "USE_HAL_DRIVER",
+                "STM32F303xx"
+            ],
+            "browse":
+            {
+                "path":
+                [
+                    "${workspaceFolder}/**"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
+            }
+        }
+    ],
+    "enableConfigurationSquiggles": true,//report errors detected in c_cpp_properties.json file to the C/C++ Extension
+    "version": 4
+}
