@@ -7,64 +7,66 @@
 
 {
     "version": "0.2.0",
-    "projectName": "Nuttx-stm32F3Discovery",
+    "projectName": "Nuttx",
     "configurations": [
-        //JLink launch nuttx.elf
+        //JLink launch
         {
-            "type": "cortex-debug", //es el que define la lista de atributos para la configuración mediante IntelliSense, Every installed debug extension introduces a type
-            "name": "JLink launch nuttx",
-            "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            //https://wiki.segger.com/J-Link_Visual_Studio_Code
+            "name": "JLink launch",
+            "type": "cortex-debug", //es el que define la lista de atributos para la configuración mediante IntelliSense
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
             "request": "launch",
             "servertype": "jlink",
+            "serverArgs": [],
             "device": "STM32F303VC",
             "interface": "swd",
-            "runToEntryPoint": "__start", // otherwise, it starts at reset handler - not interested
-            //"preLaunchTask": "Build all", // task configured in tasks.json
+            "runToEntryPoint": "main", // otherwise, it starts at reset handler - not interested
+            "preLaunchTask": "Build all", // task configured in tasks.json
             // "preLaunchCommands": ["Build all"], // you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "liveWatch": {
-                "enabled": true,
+                "enabled": false,
                 "samplesPerSecond": 4
             },
-            "swoConfig":
+            "swoConfig": //no funciona
             {
-                "enabled": true,
-                "cpuFrequency": 48000000, //si no está bien NO se mostrará nada
-                //"swoFrequency": 48000000, no hace falta ponerla, JLink la detecta
+                "enabled": false,
+                "cpuFrequency": 48000000,
+                "swoFrequency": 16000000, 
                 "source": "probe",
                 "decoders":
                 [
                     {
-                        "label": "ITM port 0 output",
+                        "label": "ITM port 0",
                         "type": "console",
                         "port": 0,
                         "showOnStartup": true,
                         "encoding": "ascii"
                     }
                 ]
-            },
-            //A mi no me hace falta, pero por si alguna vez fallara, probar esto
-            //https://github.com/Marus/cortex-debug/issues/60#issuecomment-1260950119
+            },        
             "postLaunchCommands": [
-                //"monitor swo start 48000000 48000000"
-            ]
+                "monitor swo start 48000000 48000000" //https://github.com/Marus/cortex-debug/issues/60#issuecomment-1260950119
+            ],
+            "showDevDebugOutput": "raw",
         },
-        //JLink attach discovery.elf
+        //JLink attach nuttx.elf
         {
-            "type": "cortex-debug",
             "name": "JLink attach",
-            "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
             "request": "attach",
             "servertype": "jlink",
             "device": "STM32F303VC",
             "interface": "swd",
-            "runToEntryPoint": "main",
+            "runToEntryPoint": "__start",
             "preLaunchTask": "Build all", // configured in tasks.json
             // "preLaunchCommands": ["Build all"], // you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
-            "liveWatch": {
+            "liveWatch": 
+            {
                 "enabled": true,
                 "samplesPerSecond": 4
             },
@@ -83,26 +85,42 @@
                         "showOnStartup": true,
                         "encoding": "ascii"
                     }
+                ],
+                "postLaunchCommands": 
+                [
+                "monitor swo start 16000000 2250000" //ni con esto funciona SWO
+                ],
+            },
+            "rttConfig": {
+                "enabled": false,
+                "address": "auto",
+                "decoders": [
+                    {
+                        "port": 0,
+                        "type": "console"
+                    }
                 ]
-            }
+            },
         },
-        //STlink launch nuttx.elf
+        //ST-util launch nuttx.elf
         {
-            "name": "STlink launch nuttx",
-            "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
-            "request": "launch",
+            //Utilizar mejor el st-util attach, pues launch flashea cada vez la flash
+            "name": "ST-util launch",
             "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "launch",
             "servertype": "stutil",
-            "preLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
-            "overrideLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
-            "postRestartCommands": ["st-util -p 50001 --connect-under-reset"],
+            "serverArgs": ["--connect-under-reset"],
+            /* Antes era necesario ponerlo en el launch.json, pero ahora en cambio da error */
+            //"preLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
+            //"overrideLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
+            //"postRestartCommands": ["st-util -p 50001 --connect-under-reset"],
             //"servertype": "external", "gdbTarget": "localhost:50001",
-            "serverArgs": [],
             "device": "STM32F303VCT6",
             "interface": "swd",
-            "runToEntryPoint": "main", // otherwise, it starts at reset handler - not interested
-            //"preLaunchTask": "Build", // configured in tasks.json
+            "runToEntryPoint": "main", // if "__start", it stops at reset handler - not interested
+            "preLaunchTask": "ObjcopyNuttxElf", // configured in tasks.json
             // "preLaunchCommands": ["Build all"], // you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {
@@ -110,24 +128,29 @@
                 "decoders": []
             }, // currently (v1.7.0) not supported
             "showDevDebugOutput": "raw",
-            "postDebugTask": "Kill st-util" //para evitar el error: 
+            //"postDebugTask": "Killall -9 st-util" //para evitar el error: 
 
         },
-        //STlink attach nuttx.elf
+        //ST-util attach nuttx.elf
         {
-            "name": "STlink attach Nuttx.elf",
-            "cwd": "${workspaceRoot}",
-            "executable": "${workspaceRoot}/build//nuttx/nuttx.elf",
-            "request": "attach",
+            "name": "ST-util attach",
             "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "attach",
             "servertype": "stutil",
+            "serverArgs": ["--connect-under-reset"],
             "device": "STM32F303VCT6",
             "interface": "swd",
             "runToEntryPoint": "main", // else it starts at reset handler - not interested
-            "preLaunchTask": "Build all", // configured in tasks.json
+            "preLaunchTask": "Build-nuttx.elf", // configured in tasks.json
             // "preLaunchCommands": ["Build all"], // you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
-            "swoConfig": {} // currently (v1.7.0) not supported
+            "swoConfig": {
+                "source": "probe",
+                "decoders": []
+            }, // currently (v1.7.0) not supported
+            "showDevDebugOutput": "raw",
         }
     ]
 }

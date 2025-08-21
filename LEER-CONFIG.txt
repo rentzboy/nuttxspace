@@ -1,0 +1,12 @@
+
+MODER[bits18-19]-PUPD[bits16-17]-AF[bits12-15]-FRQ[bits10-11]-O[bit9]
+
+
+MODER: 00-Input mode | 01-Gen.Purpose Output mode  | 10-Alternate function mode | 11-Analog mode
+PUPD: 00-No pull-up, pull-down (floating) | 01-Pull-up | 10-Pull-down
+AF: From GPIO_AF0 to GPIO_AF15 (ver Datasheet para el mapeo de GPIO_AFX a la Alternate Function
+FRQ: GPIO_SPEED_2MHZ | GPIO_SPEED_25MHZ | GPIO_SPEED_50MHZ | GPIO_SPEED_100MHZ
+O: 0-Push-pull output | 1-Open-drain output
+
+nuttx/arch/arm/src/stm32/hardware/stm32f30xxx_pinmap.h
+los define se recuperan del Datasheet STM32F303xx.pdf, tabla 13-pin definitons, en la página 36 
