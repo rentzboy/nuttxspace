@@ -25,7 +25,7 @@
         },
         //Build frontend
         {
-            "label": "Build",
+            "label": "Build all",
             "type": "shell",
             "problemMatcher": [],
             "group": {

@@ -9,6 +9,48 @@
     "version": "0.2.0",
     "projectName": "Nuttx",
     "configurations": [
+        //STlink attach
+        {
+            "name": "STlink attach",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "31"],
+            "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
+            "debuggerArgs": [],
+            "device": "STM32F303VCT6", //STM32F303VC en caso de error
+            "interface": "swd",
+            "runToEntryPoint": "main", // else it starts at reset handler - not interested
+            "svdFile": "${workspaceFolder}/STM32F303.svd", // Include svd to watch device peripherals
+            "swoConfig": {}, // currently (v1.7.0) not supported
+            "showDevDebugOutput": "vscode",
+            //"postDebugTask": "Kill st-util",
+        },
+        //STlink launch
+        {
+            "name": "STlink launch",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "31"],
+            "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
+            "debuggerArgs": [],
+            "device": "STM32F303VCT6", //STM32F303VC en caso de error
+            "interface": "swd",
+            "runToEntryPoint": "main", // else it starts at reset handler - not interested
+            "preLaunchTask": "Build all", // IMPORTANTE para flashear el new binario. configured in tasks.json
+            //"preLaunchCommands": [""], //you can execute command instead of task
+            "svdFile": "${workspaceFolder}/STM32F303.svd", // Include svd to watch device peripherals
+            "swoConfig": {}, // currently (v1.7.0) not supported
+            "showDevDebugOutput": "parsed",
+            //"postDebugTask": "Kill st-util",
+        },
         //JLink launch
         {
             //https://wiki.segger.com/J-Link_Visual_Studio_Code
@@ -61,9 +103,7 @@
             "servertype": "jlink",
             "device": "STM32F303VC",
             "interface": "swd",
-            "runToEntryPoint": "__start",
-            "preLaunchTask": "Build all", // configured in tasks.json
-            // "preLaunchCommands": ["Build all"], // you can execute command instead of task
+            "runToEntryPoint": "main",
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "liveWatch": 
             {
@@ -72,7 +112,7 @@
             },
             "swoConfig":
             {
-                "enabled": true,
+                "enabled": false,
                 "cpuFrequency": 72000000,
                 "swoFrequency": 4000000,
                 "source": "probe",
@@ -112,23 +152,24 @@
             "request": "launch",
             "servertype": "stutil",
             "serverArgs": ["--connect-under-reset"],
-            /* Antes era necesario ponerlo en el launch.json, pero ahora en cambio da error */
             //"preLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
             //"overrideLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
             //"postRestartCommands": ["st-util -p 50001 --connect-under-reset"],
-            //"servertype": "external", "gdbTarget": "localhost:50001",
             "device": "STM32F303VCT6",
             "interface": "swd",
             "runToEntryPoint": "main", // if "__start", it stops at reset handler - not interested
-            "preLaunchTask": "ObjcopyNuttxElf", // configured in tasks.json
+            "preLaunchTask": "Build all", // configured in tasks.json
             // "preLaunchCommands": ["Build all"], // you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 4000000,
                 "source": "probe",
                 "decoders": []
             }, // currently (v1.7.0) not supported
-            "showDevDebugOutput": "raw",
-            //"postDebugTask": "Killall -9 st-util" //para evitar el error: 
+            "showDevDebugOutput": "vscode",
+            "postDebugTask": "Killall -9 st-util" //para evitar el error: 
 
         },
         //ST-util attach nuttx.elf
@@ -142,11 +183,12 @@
             "serverArgs": ["--connect-under-reset"],
             "device": "STM32F303VCT6",
             "interface": "swd",
-            "runToEntryPoint": "main", // else it starts at reset handler - not interested
-            "preLaunchTask": "Build-nuttx.elf", // configured in tasks.json
-            // "preLaunchCommands": ["Build all"], // you can execute command instead of task
+            "runToEntryPoint": "main", // else it starts at reset handler - not interestedjson
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 4000000,
                 "source": "probe",
                 "decoders": []
             }, // currently (v1.7.0) not supported
