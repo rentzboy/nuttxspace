@@ -40,11 +40,18 @@
             ],
             "defines":
             [
-                "USE_HAL_DRIVER",
-                "STM32F303xx"
+                /* Aqui ponemos los defines de config.h para que IntelliSense los reconozca,
+                pues hay veces que el codigo se muestra casi transparente (=desactivado).
+                Eso se debe a que IntelliSense no es capaz de reconcer que partes estan activas
+                por los #ifdef. Lo mejor es utilizar bear (sudo apt install bear) para que
+                genere el compile_commands.json y añadirlo a VS Code.
+                Mientras tanto hemos añadido a "browse" el "path" de nuttx/config.h, donde están
+                los defines (Symbols), a ver si los reconoce IntelliSense.
+                Si no funciona podemos probar a añadir los symbolic links include en "includePath" */
             ],
             "browse":
             {
+                "path": ["${workspaceFolder}/nuttx/include/nuttx/*"],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }

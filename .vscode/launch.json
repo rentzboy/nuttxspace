@@ -24,7 +24,7 @@
             "device": "STM32F303VCT6", //STM32F303VC en caso de error
             "interface": "swd",
             "runToEntryPoint": "main", // else it starts at reset handler - not interested
-            "svdFile": "${workspaceFolder}/STM32F303.svd", // Include svd to watch device peripherals
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {}, // currently (v1.7.0) not supported
             "showDevDebugOutput": "vscode",
             //"postDebugTask": "Kill st-util",
@@ -46,7 +46,7 @@
             "runToEntryPoint": "main", // else it starts at reset handler - not interested
             "preLaunchTask": "Build all", // IMPORTANTE para flashear el new binario. configured in tasks.json
             //"preLaunchCommands": [""], //you can execute command instead of task
-            "svdFile": "${workspaceFolder}/STM32F303.svd", // Include svd to watch device peripherals
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {}, // currently (v1.7.0) not supported
             "showDevDebugOutput": "parsed",
             //"postDebugTask": "Kill st-util",
