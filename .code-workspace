@@ -9,7 +9,6 @@
 	"settings": {
 		"files.associations": {
 			"*.h": "c",
-			"cstdlib": "c"
 		},
 		//Los he copiado de: https://github.com/prtzl/Embedded_videos/blob/master/045_BUILDING-PT4/test-f407vg/.vscode/settings.json
 		/* armToolchainPath se puede override en launch.json */
