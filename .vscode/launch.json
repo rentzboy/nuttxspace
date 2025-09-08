@@ -17,16 +17,15 @@
             "request": "attach",
             "type": "cortex-debug",
             "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
-            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "31"],
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "10"],
             "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
             "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
             "debuggerArgs": [],
             "device": "STM32F303VCT6", //STM32F303VC en caso de error
             "interface": "swd",
-            "runToEntryPoint": "main", // else it starts at reset handler - not interested
+            "runToEntryPoint": "__start", // if main it starts at reset handler (since can´t find it)
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {}, // currently (v1.7.0) not supported
-            "showDevDebugOutput": "vscode",
             //"postDebugTask": "Kill st-util",
         },
         //STlink launch
@@ -37,18 +36,17 @@
             "request": "launch",
             "type": "cortex-debug",
             "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
-            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "31"],
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "10"],
             "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
             "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
             "debuggerArgs": [],
             "device": "STM32F303VCT6", //STM32F303VC en caso de error
             "interface": "swd",
-            "runToEntryPoint": "main", // else it starts at reset handler - not interested
+            "runToEntryPoint": "__start", // if main it starts at reset handler (since can´t find it)
             "preLaunchTask": "Build all", // IMPORTANTE para flashear el new binario. configured in tasks.json
             //"preLaunchCommands": [""], //you can execute command instead of task
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
             "swoConfig": {}, // currently (v1.7.0) not supported
-            "showDevDebugOutput": "parsed",
             //"postDebugTask": "Kill st-util",
         },
         //JLink launch
@@ -90,8 +88,7 @@
             },        
             "postLaunchCommands": [
                 "monitor swo start 48000000 48000000" //https://github.com/Marus/cortex-debug/issues/60#issuecomment-1260950119
-            ],
-            "showDevDebugOutput": "raw",
+            ]
         },
         //JLink attach nuttx.elf
         {
@@ -168,7 +165,6 @@
                 "source": "probe",
                 "decoders": []
             }, // currently (v1.7.0) not supported
-            "showDevDebugOutput": "vscode",
             "postDebugTask": "Killall -9 st-util" //para evitar el error: 
 
         },
@@ -185,14 +181,13 @@
             "interface": "swd",
             "runToEntryPoint": "main", // else it starts at reset handler - not interestedjson
             "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
-            "swoConfig": {
+            "swoConfig": { // currently (v1.7.0) not supported
                 "enabled": false,
                 "cpuFrequency": 72000000,
                 "swoFrequency": 4000000,
                 "source": "probe",
                 "decoders": []
-            }, // currently (v1.7.0) not supported
-            "showDevDebugOutput": "raw",
+            } 
         }
     ]
 }
