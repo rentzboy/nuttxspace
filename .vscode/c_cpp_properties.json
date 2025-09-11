@@ -1,8 +1,7 @@
 /* Las diferentes configuraciones disponibles para la extesnsion C/C++ que gestiona IntelliSense
     Este archivo lo podemos copiar en cada proyecto y luego seleccionar la config. correcta
-    para nuestro proyecto desde la esquina inferior derecha de VS Code */
-
-//https://code.visualstudio.com/docs/cpp/c-cpp-properties-schema-reference
+    para nuestro proyecto desde la esquina inferior derecha de VS Code 
+    https://code.visualstudio.com/docs/cpp/customize-cpp-settings */
 {
     "configurations": [
         //Proyecto de Linux
@@ -36,7 +35,7 @@
             "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
             "includePath":
             [
-                "${workspaceFolder}/**"
+                "${workspaceFolder}/**", "${workspaceFolder}/nuttx/include/nuttx/"
             ],
             "defines":
             [
@@ -51,7 +50,7 @@
             ],
             "browse":
             {
-                "path": ["${workspaceFolder}/nuttx/include/nuttx/*"],
+                "path": ["${workspaceFolder}/nuttx/include/nuttx/*", "${workspaceFolder}"],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
