@@ -1,10 +1,5 @@
-/* Las diferentes configuraciones disponibles para la extesnsion C/C++ que gestiona IntelliSense
-    Este archivo lo podemos copiar en cada proyecto y luego seleccionar la config. correcta
-    para nuestro proyecto desde la esquina inferior derecha de VS Code 
-    https://code.visualstudio.com/docs/cpp/customize-cpp-settings */
 {
     "configurations": [
-        //Proyecto de Linux
         {
             "name": "GNU C",
             "includePath": [
@@ -15,70 +10,57 @@
             "cppStandard": "gnu++14",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.makefile-tools",
-            "browse":
-            {
-                "path":
-                [
+            "browse": {
+                "path": [
                     "${workspaceFolder}/**"
                 ],
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
-        //Proyecto de Nuttx
         {
-            "name": "Nuttx", //permite cambiar de conf. desde el icono de status bar
+            "name": "Nuttx",
             "cStandard": "c99",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.makefile-tools",
             "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
-            "includePath":
-            [
-                "${workspaceFolder}/**", "${workspaceFolder}/nuttx/include/nuttx/"
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/nuttx/include/nuttx/",
+                "${workspaceFolder}/nuttx/include",
+                "${workspaceFolder}/nuttx/arch/arm/src/common"
             ],
-            "defines":
-            [
-                /* Aqui ponemos los defines de config.h para que IntelliSense los reconozca,
-                pues hay veces que el codigo se muestra casi transparente (=desactivado).
-                Eso se debe a que IntelliSense no es capaz de reconcer que partes estan activas
-                por los #ifdef. Lo mejor es utilizar bear (sudo apt install bear) para que
-                genere el compile_commands.json y añadirlo a VS Code.
-                Mientras tanto hemos añadido a "browse" el "path" de nuttx/config.h, donde están
-                los defines, a ver si los reconoce IntelliSense.
-                Si no funciona podemos probar a añadir los symbolic links include en "includePath" */
-            ],
-            "browse":
-            {
-                "path": ["${workspaceFolder}/nuttx/include/nuttx/*", "${workspaceFolder}"],
-                "limitSymbolsToIncludedHeaders": true,
+            "defines": [],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "${workspaceFolder}/nuttx/include/nuttx/*"
+                ],
+                "limitSymbolsToIncludedHeaders": false,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
-        //Proyecto de STM32CubeMX
         {
-            "name": "STM32CubeMX", //permite cambiar de conf. desde el icono de status bar
+            "name": "STM32CubeMX",
             "cStandard": "c99",
             "cppStandard": "gnu++14",
             "intelliSenseMode": "linux-gcc-x64",
             "configurationProvider": "ms-vscode.makefile-tools",
             "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
-            "includePath":
-            [
+            "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "defines":
-            [
+            "defines": [
                 "USE_HAL_DRIVER",
                 "STM32F303xx"
             ],
-            "browse":
-            {
+            "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         }
     ],
-    "enableConfigurationSquiggles": true,//report errors detected in c_cpp_properties.json file to the C/C++ Extension
+    "enableConfigurationSquiggles": true,
     "version": 4
 }
