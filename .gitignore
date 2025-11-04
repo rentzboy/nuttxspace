@@ -3,3 +3,4 @@
 .vscode/browse.vc.db-wal
 *.log
 *.o
+.gemini/env
