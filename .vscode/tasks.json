@@ -139,12 +139,6 @@
             "command": "cd ${workspaceRoot}/nuttx && /opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-objcopy nuttx nuttx.elf",
             "problemMatcher": []
         },
-        //Change to /renode_portable
-        {
-            "label": "Path to Renode",
-            "type": "shell",
-            "command": "cd ${workspaceFolder}/../../../renode_portable/"
-        },
         //Run Renode
         {
             "label": "Run Renode",
@@ -171,6 +165,10 @@
                 }
             },
             "group": "build",
+                        "icon": {
+                "id": "run",
+                "color": "terminal.ansiGreen"
+            },
             "presentation": {
                 "reveal": "always",
                 "panel": "dedicated"
@@ -181,7 +179,10 @@
             "label": "Close Renode",
             "command": "echo ${input:terminate}",
             "type": "shell",
-            "problemMatcher": []
+            "icon": {
+                "id": "close",
+                "color": "terminal.ansiRed"
+            }
         }
         /* ccpbuild
         {
