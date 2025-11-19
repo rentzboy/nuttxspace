@@ -188,6 +188,18 @@
                 "source": "probe",
                 "decoders": []
             } 
+        },
+        //Renode
+        {
+            "name": "Renode launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "Run Renode",
+            "postDebugTask": "Close Renode",
+            "miDebuggerServerAddress": "localhost:3333",
+            "cwd": "${workspaceRoot}",
+            "miDebuggerPath": "arm-none-eabi-gdb",
+            "program": "${workspaceRoot}/nuttx/nuttx.elf"
         }
     ]
 }

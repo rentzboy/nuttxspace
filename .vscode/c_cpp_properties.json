@@ -1,5 +1,6 @@
 {
     "configurations": [
+        //GNU C
         {
             "name": "GNU C",
             "includePath": [
@@ -18,6 +19,7 @@
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
+        //Nuttx
         {
             "name": "Nuttx",
             "cStandard": "c99",
@@ -41,6 +43,7 @@
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
+        //STM32CubeMX
         {
             "name": "STM32CubeMX",
             "cStandard": "c99",
@@ -52,8 +55,6 @@
                 "${workspaceFolder}/**"
             ],
             "defines": [
-                "USE_HAL_DRIVER",
-                "STM32F303xx"
             ],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
