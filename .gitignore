@@ -89,3 +89,6 @@ disassembly.S
 arch/arm/src/stm32_start.s
 libs/libc/bin/lib_utsname.s
 .config*.old
+.vscode/browse.vc.db
+.vscode/browse.vc.db-shm
+.vscode/browse.vc.db-wal

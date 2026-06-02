@@ -1,0 +1,88 @@
+#┌────────────────────┬────────────────────────────────────────────────────────────────────────────────────┐
+#│        Paso        │                                      Detalle                                       │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Checkout           │ Obtiene el repositorio del workspace                                               │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Clone kernel/apps  │ Clona NuttX 12.5.1 limpio desde GitHub (los gitlinks del repo quedan vacíos en CI) │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Install deps       │ cmake, ninja-build, python3-kconfiglib vía apt                                     │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Cache toolchain    │ Cachea el toolchain ARM entre runs para no descargarlo cada vez                    │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Download toolchain │ Descarga ARM GNU 14.2.rel1 desde arm.com solo si no está en caché                  │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Configure          │ cmake -S nuttx -B build -DBOARD_CONFIG=stm32f3discovery:nsh -GNinja                │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Build              │ cmake --build build -j$(nproc)                                                     │
+#├────────────────────┼────────────────────────────────────────────────────────────────────────────────────┤
+#│ Artifacts          │ Sube nuttx, nuttx.bin, nuttx.hex como artefactos descargables                      │
+#└────────────────────┴────────────────────────────────────────────────────────────────────────────────────┘
+
+# En el próximo git push se activa automáticamente. Los artefactos del firmware quedan disponibles en la pestaña #A ctions de GitHub.
+
+name: Build STM32F3Discovery
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Clone NuttX kernel 12.5.1
+        run: |
+          rm -rf nuttx
+          git clone --depth 1 --branch nuttx-12.5.1 \
+            https://github.com/apache/nuttx.git nuttx
+
+      - name: Clone NuttX apps 12.5.1
+        run: |
+          rm -rf apps
+          git clone --depth 1 --branch nuttx-12.5.1 \
+            https://github.com/apache/nuttx-apps.git apps
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y cmake ninja-build python3-kconfiglib
+
+      - name: Cache ARM toolchain
+        id: cache-toolchain
+        uses: actions/cache@v4
+        with:
+          path: arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi
+          key: arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi
+
+      - name: Download ARM GNU Toolchain 14.2
+        if: steps.cache-toolchain.outputs.cache-hit != 'true'
+        run: |
+          wget -q "https://developer.arm.com/-/media/Files/downloads/gnu/14.2.rel1/binrel/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz"
+          tar -xf arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz
+          rm arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi.tar.xz
+
+      - name: Add toolchain to PATH
+        run: echo "$GITHUB_WORKSPACE/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin" >> $GITHUB_PATH
+
+      - name: Configure
+        run: |
+          cmake -S nuttx -B build \
+            -DBOARD_CONFIG=stm32f3discovery:nsh \
+            -GNinja
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Upload firmware artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nuttx-stm32f3discovery-nsh
+          path: |
+            build/nuttx
+            build/nuttx.bin
+            build/nuttx.hex
+          if-no-files-found: warn
