@@ -1,11 +1,14 @@
+# ── Build artifacts ───────────────────────────────────────────────────────────
 *.a
 *.adb
-*.dba
-*.dbo
 *.asm
 *.bin
 *.d
 !*.d/
+*.dba
+*.dbo
+*.ddc
+*.dds
 *.dSYM
 *.elf
 *.exe
@@ -19,35 +22,60 @@
 *.lod
 *.lst
 *.map
+*.mapfile
 *.o
 *.obj
 *.profraw
+*.pyc
 *.rel
 *.src
 *.srec
+*.su
 *.swn
 *.swo
 *.swp
 *.sym
+*.SystemMap
 *.tmp
 *.wsp
-*.ddc
-*.dds
-*.su
-*.pyc
-*.mapfile
-*.SystemMap
 *~
 \#*\#
 .\#*
+core
+Make*.dep
+uImage
+disassembly.S
+arch/arm/src/stm32_start.s
+libs/libc/bin/lib_utsname.s
+
+# ── NuttX source directories (gestionados como repos independientes) ───────────
+/nuttx/
+/apps/
+/Documentation/
+
+# ── NuttX build outputs ───────────────────────────────────────────────────────
+/build
+/staging
+/external
+/nuttx32
+/nuttx-*
+/nuttx.*
+/nuttx_user*
+kwarning
+SAVEMake.defs
+SAVEconfig
+imx9-sdimage.img
+imx9-norimage.img
+
+# ── NuttX config & metadata ───────────────────────────────────────────────────
 .depend
 /.cache
 /.config
 /.config.*
 /.config-*
+/.config*.old
 /.config\ *
 /.cproject
-/.cache
 /.clang-format
 /.gdbinit
 /.gdb_history
@@ -57,42 +85,24 @@
 /cscope.*
 /defconfig
 /Make.defs
-/apps/
-/nuttx/
-/nuttx_user*
-/staging
-**/tags
-/TAGS
-core
-Make*.dep
-uImage
-/external
-/nuttx/
-/apps/
-/Documentation/
-.vscode/browse.vc.db
-# $(TOPDIR)/Makefile.[unix|win]::$(CONTEXTDIRS_DEPS)
 .context
 .context\ *
-# $(TOPDIR)/Makefile.[unix|win]::$(DIRLINKS_EXTERNAL_DIRS)
 .dirlinks
 .fakelnk
+
+# ── IDE & editor ──────────────────────────────────────────────────────────────
 .idea
 .DS_Store
-tools/gdb/__pycache__
-/build
-.ccls-cache
-compile_commands.json
-imx9-sdimage.img
-kwarning
-SAVEMake.defs
-SAVEconfig
-.aider*
-imx9-norimage.img
-disassembly.S
-arch/arm/src/stm32_start.s
-libs/libc/bin/lib_utsname.s
-.config*.old
 .vscode/browse.vc.db
 .vscode/browse.vc.db-shm
 .vscode/browse.vc.db-wal
+
+# ── Tags ──────────────────────────────────────────────────────────────────────
+**/tags
+/TAGS
+
+# ── Tools ─────────────────────────────────────────────────────────────────────
+.aider*
+.ccls-cache
+compile_commands.json
+tools/gdb/__pycache__
