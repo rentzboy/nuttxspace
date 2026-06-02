@@ -67,6 +67,10 @@ core
 Make*.dep
 uImage
 /external
+/nuttx/
+/apps/
+/Documentation/
+.vscode/browse.vc.db
 # $(TOPDIR)/Makefile.[unix|win]::$(CONTEXTDIRS_DEPS)
 .context
 .context\ *
