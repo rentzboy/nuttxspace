@@ -1,0 +1,205 @@
+
+// Launch.json attributes list: https://code.visualstudio.com/docs/editor/debugging#_launchjson-attributes
+// Cortex-Debug attributes list: https://github.com/Marus/cortex-debug/blob/master/debug_attributes.md
+// Configuration copied from: https://github.com/prtzl/Embedded_videos/tree/master/045_BUILDING-PT4/test-f407vg/.vscode
+// https://wiki.segger.com/J-Link_Visual_Studio_Code
+// Algunas configuraciones las ponemos en el archivo settings.json
+
+{
+    "version": "0.2.0",
+    "projectName": "Nuttx",
+    "configurations": [
+        //STlink attach
+        {
+            "name": "STlink attach",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            "request": "attach",
+            "type": "cortex-debug",
+            "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "10"],
+            "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
+            "debuggerArgs": [],
+            "device": "STM32F303VCT6", //STM32F303VC en caso de error
+            "interface": "swd",
+            "runToEntryPoint": "__start", // if main it starts at reset handler (since can´t find it)
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "swoConfig": {}, // currently (v1.7.0) not supported
+            //"postDebugTask": "Kill st-util",
+        },
+        //STlink launch
+        {
+            "name": "STlink launch",
+            "cwd": "${workspaceRoot}",
+            "executable": "${workspaceRoot}/nuttx/nuttx.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "servertype": "stlink", // cortex-debug no admite swo para stlink ni st-util
+            "serverArgs": ["--shared", /*"--swo-port", "50005",*/ "--verbose", "--log-level", "10"],
+            "stlinkPath": "/opt/st/stm32cubeclt/STLink-gdb-server/bin/ST-LINK_gdbserver",
+            "stm32cubeprogrammer": "/opt/st/stm32cubeclt/STM32CubeProgrammer/bin",
+            "debuggerArgs": [],
+            "device": "STM32F303VCT6", //STM32F303VC en caso de error
+            "interface": "swd",
+            "runToEntryPoint": "__start", // if main it starts at reset handler (since can´t find it)
+            "preLaunchTask": "Build all", // IMPORTANTE para flashear el new binario. configured in tasks.json
+            //"preLaunchCommands": [""], //you can execute command instead of task
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "swoConfig": {}, // currently (v1.7.0) not supported
+            //"postDebugTask": "Kill st-util",
+        },
+        //JLink launch
+        {
+            //https://wiki.segger.com/J-Link_Visual_Studio_Code
+            "name": "JLink launch",
+            "type": "cortex-debug", //es el que define la lista de atributos para la configuración mediante IntelliSense
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "launch",
+            "servertype": "jlink",
+            "serverArgs": [],
+            "device": "STM32F303VC",
+            "interface": "swd",
+            "runToEntryPoint": "main", // otherwise, it starts at reset handler - not interested
+            "preLaunchTask": "Build all", // task configured in tasks.json
+            // "preLaunchCommands": ["Build all"], // you can execute command instead of task
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "liveWatch": {
+                "enabled": false,
+                "samplesPerSecond": 4
+            },
+            "swoConfig": //no funciona
+            {
+                "enabled": false,
+                "cpuFrequency": 48000000,
+                "swoFrequency": 16000000, 
+                "source": "probe",
+                "decoders":
+                [
+                    {
+                        "label": "ITM port 0",
+                        "type": "console",
+                        "port": 0,
+                        "showOnStartup": true,
+                        "encoding": "ascii"
+                    }
+                ]
+            },        
+            "postLaunchCommands": [
+                "monitor swo start 48000000 48000000" //https://github.com/Marus/cortex-debug/issues/60#issuecomment-1260950119
+            ]
+        },
+        //JLink attach nuttx.elf
+        {
+            "name": "JLink attach",
+            "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "attach",
+            "servertype": "jlink",
+            "device": "STM32F303VC",
+            "interface": "swd",
+            "runToEntryPoint": "main",
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "liveWatch": 
+            {
+                "enabled": true,
+                "samplesPerSecond": 4
+            },
+            "swoConfig":
+            {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 4000000,
+                "source": "probe",
+                "decoders":
+                [
+                    {
+                        "label": "ITM port 0 output",
+                        "type": "console",
+                        "port": 0,
+                        "showOnStartup": true,
+                        "encoding": "ascii"
+                    }
+                ],
+                "postLaunchCommands": 
+                [
+                "monitor swo start 16000000 2250000" //ni con esto funciona SWO
+                ],
+            },
+            "rttConfig": {
+                "enabled": false,
+                "address": "auto",
+                "decoders": [
+                    {
+                        "port": 0,
+                        "type": "console"
+                    }
+                ]
+            },
+        },
+        //ST-util launch nuttx.elf
+        {
+            //Utilizar mejor el st-util attach, pues launch flashea cada vez la flash
+            "name": "ST-util launch",
+            "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "launch",
+            "servertype": "stutil",
+            "serverArgs": ["--connect-under-reset"],
+            //"preLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
+            //"overrideLaunchCommands": ["st-util -p 50001 --connect-under-reset"],
+            //"postRestartCommands": ["st-util -p 50001 --connect-under-reset"],
+            "device": "STM32F303VCT6",
+            "interface": "swd",
+            "runToEntryPoint": "main", // if "__start", it stops at reset handler - not interested
+            "preLaunchTask": "Build all", // configured in tasks.json
+            // "preLaunchCommands": ["Build all"], // you can execute command instead of task
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "swoConfig": {
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 4000000,
+                "source": "probe",
+                "decoders": []
+            }, // currently (v1.7.0) not supported
+            "postDebugTask": "Killall -9 st-util" //para evitar el error: 
+
+        },
+        //ST-util attach nuttx.elf
+        {
+            "name": "ST-util attach",
+            "type": "cortex-debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/nuttx/nuttx.elf",
+            "request": "attach",
+            "servertype": "stutil",
+            "serverArgs": ["--connect-under-reset"],
+            "device": "STM32F303VCT6",
+            "interface": "swd",
+            "runToEntryPoint": "main", // else it starts at reset handler - not interestedjson
+            "svdFile": "${workspaceFolder}/STM32F303VCT6.svd", // Include svd to watch device peripherals
+            "swoConfig": { // currently (v1.7.0) not supported
+                "enabled": false,
+                "cpuFrequency": 72000000,
+                "swoFrequency": 4000000,
+                "source": "probe",
+                "decoders": []
+            } 
+        },
+        //Renode
+        {
+            "name": "Renode launch",
+            "type": "cppdbg",
+            "request": "launch",
+            "preLaunchTask": "Run Renode",
+            "postDebugTask": "Close Renode",
+            "miDebuggerServerAddress": "localhost:3333",
+            "cwd": "${workspaceRoot}",
+            "miDebuggerPath": "arm-none-eabi-gdb",
+            "program": "${workspaceRoot}/nuttx/nuttx.elf"
+        }
+    ]
+}
