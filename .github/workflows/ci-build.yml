@@ -18,7 +18,7 @@
 #│ Artifacts          │ Sube nuttx, nuttx.bin, nuttx.hex como artefactos descargables                      │
 #└────────────────────┴────────────────────────────────────────────────────────────────────────────────────┘
 
-# En el próximo git push se activa automáticamente. Los artefactos del firmware quedan disponibles en la pestaña #A ctions de GitHub.
+# En el próximo git push se activa automáticamente. Los artefactos del firmware quedan disponibles en la # pestaña Actions de GitHub.
 
 name: Build STM32F3Discovery
 
