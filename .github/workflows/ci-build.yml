@@ -53,7 +53,7 @@ jobs:
 
       - name: Cache ARM toolchain
         id: cache-toolchain
-        uses: actions/cache@v4
+        uses: actions/cache@v6
         with:
           path: arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi
           key: arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi
