@@ -78,7 +78,7 @@ jobs:
         run: cmake --build build -j$(nproc)
 
       - name: Upload firmware artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nuttx-stm32f3discovery-nsh
           path: |
