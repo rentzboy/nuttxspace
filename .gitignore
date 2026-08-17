@@ -25,6 +25,7 @@
 *.mapfile
 *.o
 *.obj
+*.pdf
 *.profraw
 *.pyc
 *.rel
@@ -106,3 +107,4 @@ imx9-norimage.img
 .ccls-cache
 compile_commands.json
 tools/gdb/__pycache__
+.gemini/env

@@ -1,15 +1,14 @@
 {
     "configurations": [
-        //GNU C
         {
             "name": "GNU C",
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "compilerPath": "/usr/bin/gcc",
+            "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
             "cStandard": "c99",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "gcc-arm",
             "configurationProvider": "ms-vscode.makefile-tools",
             "browse": {
                 "path": [
@@ -19,21 +18,25 @@
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
-        //Nuttx
         {
             "name": "Nuttx",
             "cStandard": "c99",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "gcc-arm",
             "configurationProvider": "ms-vscode.makefile-tools",
             "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/nuttx/include/nuttx/",
+                "${workspaceFolder}/apps/include",
                 "${workspaceFolder}/nuttx/include",
+                "${workspaceFolder}/nuttx/include/nuttx/",
+                "${workspaceFolder}/nuttx/arch/arm/include",
                 "${workspaceFolder}/nuttx/arch/arm/src/common"
             ],
-            "defines": [],
+            "defines": [
+                "__NuttX__",
+                "__KERNEL__"
+            ],
             "browse": {
                 "path": [
                     "${workspaceFolder}",
@@ -43,19 +46,17 @@
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
             }
         },
-        //STM32CubeMX
         {
             "name": "STM32CubeMX",
             "cStandard": "c99",
             "cppStandard": "gnu++14",
-            "intelliSenseMode": "linux-gcc-x64",
+            "intelliSenseMode": "gcc-arm",
             "configurationProvider": "ms-vscode.makefile-tools",
             "compilerPath": "/opt/arm-gnu-toolchain-14.2.rel1-x86_64-arm-none-eabi/bin/arm-none-eabi-gcc",
             "includePath": [
                 "${workspaceFolder}/**"
             ],
-            "defines": [
-            ],
+            "defines": [],
             "browse": {
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "${workspaceFolder}/.vscode/browse.vc.db"
